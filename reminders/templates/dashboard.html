@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Office Zenith - Wellness Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
+
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="theme-toggle" onclick="toggleTheme()">
+                <span id="themeIcon">🌙</span>
+                <span class="theme-toggle-text" id="themeText">Dark</span>
+            </div>
+            <h1>Office Zenith</h1>
+            <p>Your Personal Wellness Reminder System</p>
+        </div>
+
+        <!-- Notification status -->
+        <div class="notification-demo" id="notificationDemo" style="display: none;">
+            <strong>Test your notifications:</strong> Click "Enable Notifications" below, then click "Test Notification".
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <button class="btn" onclick="toggleAddForm()">+ Add Reminder</button>
+                <button class="btn btn-success" onclick="requestNotificationPermission()">🔔 Enable Notifications</button>
+                <button class="btn btn-secondary" onclick="testNotification()" id="testBtn" style="display: none;">Test Notification</button>
+            </div>
+            <div class="notification-status">
+                Status: <span id="notificationState">Checking...</span>
+            </div>
+        </div>
+
+        <!-- Add Reminder Form -->
+        <div class="add-reminder-form" id="addReminderForm">
+            <h3>Add New Wellness Reminder</h3>
+            <form onsubmit="addReminder(event)">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" required placeholder="e.g., Take a break">
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" rows="3" required placeholder="Describe this reminder..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="timer">Timer Interval</label>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="number" id="timerValue" name="timerValue" min="1" max="480" value="30" required>
+                        <select id="timerUnit" name="timerUnit">
+                            <option value="minutes">Minutes</option>
+                            <option value="seconds">Seconds</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success">Add Reminder</button>
+                    <button type="button" class="btn btn-secondary" onclick="toggleAddForm()">Cancel</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Reminders -->
+        <div class="reminders-grid" id="remindersGrid">
+            <!-- Cards rendered via JS -->
+        </div>
+
+        <!-- Logs -->
+        <div class="logs-section">
+            <div class="logs-header">
+                <h3>Activity Logs</h3>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn" onclick="downloadTodayLogs()">📥 Download Today's Logs</button>
+                    <button class="btn btn-danger" onclick="clearLogs()">Clear Logs</button>
+                </div>
+            </div>
+            <div class="logs-list" id="logsList">
+                <!-- Log entries rendered via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <div id="toastMessage"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{% static 'js/dashboard.js' %}"></script>
+</body>
+</html>

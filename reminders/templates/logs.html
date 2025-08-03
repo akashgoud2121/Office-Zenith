@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>Reminder Activity Logs</h2>
+  <ul>
+    {% for log in logs %}
+      <li>{{ log.reminder.title }} — {{ log.logged_at }}</li>
+    {% empty %}
+      <li>No activities logged yet.</li>
+    {% endfor %}
+  </ul>
+  <a href="{% url 'dashboard' %}">Back to Dashboard</a>
+{% endblock %}
