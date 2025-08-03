@@ -10,7 +10,7 @@ let reminders = [
   },
   {
     id: 2,
-    title: "Eye Rest (20-20-20 Rule) 👀",
+    title: "Eye Rest 20-20-20 Rule👀",
     description:
       "Look at something 20 feet away for 20 seconds to reduce eye strain.",
     timer: 20,
@@ -279,28 +279,42 @@ function showNotification(title, description) {
 
   if (Notification.permission === "granted") {
     try {
-      const notification = new Notification(`Office Zenith: ${title}`, {
-        body: description,
-        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🧘</text></svg>',
-        requireInteraction: false,
-        silent: false,
-      });
+      // Check if we're on mobile/service worker required
+      if (
+        "serviceWorker" in navigator &&
+        /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      ) {
+        // For mobile devices, use a fallback approach
+        showToast(`🔔 ${title}: ${description}`);
+        console.log("Mobile notification shown as toast");
+      } else {
+        // Desktop notification
+        const notification = new Notification(`Office Zenith: ${title}`, {
+          body: description,
+          icon: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48dGV4dCB5PSIuOWVtIiBmb250LXNpemU9IjkwIj7wn6eYPC90ZXh0Pjwvc3ZnPg==",
+          requireInteraction: false,
+          silent: false,
+        });
 
-      console.log("Notification created successfully");
+        console.log("Desktop notification created successfully");
 
-      notification.onclick = function () {
-        console.log("Notification clicked");
-        window.focus();
-        this.close();
-      };
+        notification.onclick = function () {
+          console.log("Notification clicked");
+          window.focus();
+          this.close();
+        };
 
-      // Auto close after 5 seconds
-      setTimeout(() => {
-        notification.close();
-      }, 5000);
+        // Auto close after 5 seconds
+        setTimeout(() => {
+          notification.close();
+        }, 5000);
+      }
     } catch (error) {
       console.error("Error creating notification:", error);
-      showToast("Error showing notification: " + error.message);
+      // Fallback to toast notification
+      showToast(`🔔 ${title}: ${description}`);
     }
   } else {
     console.log(
@@ -327,31 +341,45 @@ function testNotification() {
   }
 
   try {
-    // Create a simple test notification
-    const notification = new Notification("Office Zenith Test", {
-      body: "If you can see this, notifications are working perfectly!",
-      icon: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48dGV4dCB5PSIuOWVtIiBmb250LXNpemU9IjkwIj7wn6eYPC90ZXh0Pjwvc3ZnPg==",
-      tag: "test-notification",
-      requireInteraction: false,
-    });
+    // Check if we're on mobile
+    if (
+      /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      )
+    ) {
+      // Mobile fallback - show enhanced toast
+      showToast(
+        "🔔 Test Notification: If you can see this, notifications are working!"
+      );
+      console.log("Mobile test notification shown as enhanced toast");
+    } else {
+      // Desktop notification
+      const notification = new Notification("Office Zenith Test", {
+        body: "If you can see this, notifications are working perfectly!",
+        icon: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48dGV4dCB5PSIuOWVtIiBmb250LXNpemU9IjkwIj7wn6eYPC90ZXh0Pjwvc3ZnPg==",
+        tag: "test-notification",
+        requireInteraction: false,
+      });
 
-    console.log("Test notification created");
-    showToast("Test notification sent!");
+      console.log("Desktop test notification created");
+      showToast("Test notification sent!");
 
-    // Handle click
-    notification.onclick = function () {
-      console.log("Test notification clicked");
-      window.focus();
-      this.close();
-    };
+      // Handle click
+      notification.onclick = function () {
+        console.log("Test notification clicked");
+        window.focus();
+        this.close();
+      };
 
-    // Auto close after 5 seconds
-    setTimeout(() => {
-      notification.close();
-    }, 5000);
+      // Auto close after 5 seconds
+      setTimeout(() => {
+        notification.close();
+      }, 5000);
+    }
   } catch (error) {
     console.error("Error creating test notification:", error);
-    showToast("Error: " + error.message);
+    // Always fallback to toast on error
+    showToast("🔔 Test Notification: Fallback mode active!");
   }
 }
 
