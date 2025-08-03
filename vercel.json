@@ -5,15 +5,9 @@
       "src": "officezenith/wsgi.py",
       "use": "@vercel/python",
       "config": { "maxLambdaSize": "15mb", "runtime": "python3.11" }
-    },
-    {
-      "src": "buildfiles.sh",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "staticfiles" }
     }
   ],
   "routes": [
-    { "src": "/static/(.*)", "dest": "/staticfiles/$1", "headers": { "Cache-Control": "public, max-age=3600" } },
     { "src": "/(.*)", "dest": "officezenith/wsgi.py" }
   ]
 }
