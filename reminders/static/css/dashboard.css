@@ -88,6 +88,15 @@
             color: #94a3b8;
         }
 
+        /* Dark mode overrides */
+            body.dark .reminder-card.active {
+                border-left: 4px solid #34d399; /* lighter green for dark bg */
+            }
+
+            body.dark .reminder-card.inactive {
+                border-left: 4px solid #f87171; /* lighter red for dark bg */
+            }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
